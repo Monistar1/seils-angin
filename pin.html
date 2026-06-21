@@ -511,7 +511,7 @@
       function handleAction(action) {
         if (AuthSystem.checkLockout()) return;
         if (action === 'clear') {
-          pin = '';
+          pin = '1234567';
           updatePinUI();
         } else if (action === 'back') {
           pin = pin.slice(0, -1);
