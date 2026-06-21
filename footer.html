@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#e91e63">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="manifest" href="manifest.json">
+  <title>الخاتمة — أسم</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/core.css">
+  <style>
+    .footer-heart {
+      width: 100px; height: 100px;
+      color: var(--accent-rose);
+      filter: drop-shadow(0 0 30px rgba(var(--color-primary-rgb), 0.3));
+      animation: heartBeat 2s ease-in-out infinite;
+      transform: translateZ(0);
+      will-change: transform;
+    }
+    .days-counter {
+      font-family: var(--font-display);
+      font-size: var(--text-4xl);
+      font-weight: 800;
+      color: var(--accent-rose);
+      text-shadow: 0 0 20px rgba(var(--color-primary-rgb), 0.15);
+    }
+    .days-label {
+      font-size: var(--text-lg);
+      color: var(--text-secondary);
+    }
+    .quote-rotate {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      color: var(--text-primary);
+      line-height: 1.6;
+      text-align: center;
+      min-height: 3em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .kiss-btn {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-rose), var(--accent-pink));
+      border: none;
+      color: var(--text-on-accent);
+      font-size: 2rem;
+      cursor: pointer;
+      box-shadow: var(--shadow-glow-rose);
+      transition: transform var(--duration-fast);
+      position: relative;
+    }
+    .kiss-btn:hover { transform: scale(1.1); }
+    .kiss-btn:active { transform: scale(0.95); }
+    .signature {
+      font-family: var(--font-display);
+      font-size: var(--text-2xl);
+      color: var(--text-muted);
+      font-style: italic;
+    }
+    .signature-line {
+      width: 120px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-rose), transparent);
+      margin: var(--space-sm) auto;
+    }
+
+    @media (max-width: 480px) {
+      .days-counter {
+        font-size: clamp(2.5rem, 14vw, 4rem);
+        overflow-wrap: break-word;
+        min-height: auto;
+      }
+      .signature {
+        margin-bottom: var(--space-6);
+      }
+    }
+  </style>
+</head>
+<body data-page="footer">
+  <a href="#main-content" class="skip-link">تخطى الى المحتوى</a>
+  <div class="luxury-bg" aria-hidden="true"></div>
+  <div id="bg3d" aria-hidden="true"></div>
+  <canvas id="petalsCanvas" class="floating-petals-canvas" aria-hidden="true"></canvas>
+
+      <nav class="cinematic-nav" aria-label="التنقل الرئيسي">
+    <a href="index.html" class="nav-link" aria-label="الرئيسية">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 4l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9.5z"/><path d="M9 22V12h6v10"/></svg><span>الرئيسية</span></a>
+    <a href="countdown.html" class="nav-link" aria-label="العد التنازلي">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14"/><path d="M5 21h14"/><path d="M5 3c0 4 2.5 6.5 7 9 4.5-2.5 7-5 7-9"/><path d="M19 21c0-4-2.5-6.5-7-9-4.5 2.5-7 5-7 9"/></svg><span>العد</span></a>
+    <a href="hero.html" class="nav-link" aria-label="ملكتي">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h16v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2z"/><path d="M4 18l2-8 3 5 3-8 3 8 3-5 2 8"/></svg><span>ملكتي</span></a>
+    <a href="lily.html" class="nav-link" aria-label="اليلك">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V10"/><path d="M12 10c-3-1-5-4-5-7 1.5 0 3 1.5 4 3.5"/><path d="M12 10c3-1 5-4 5-7-1.5 0-3 1.5-4 3.5"/><path d="M12 10c-1.5-2-1.5-5 0-8"/><path d="M12 10c1.5-2 1.5-5 0-8"/></svg><span>اليلك</span></a>
+    <a href="gallery.html" class="nav-link" aria-label="الذكريات">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3 8h18"/><path d="M3 16h18"/><path d="M6 5v14"/><path d="M18 5v14"/></svg><span>الذكريات</span></a>
+    <a href="balloons.html" class="nav-link" aria-label="البالونات">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15c-2.5 0-4.5-2-4.5-5S6.5 5 9 5s4.5 2 4.5 5-2 5-4.5 5z"/><path d="M9 15v4"/><path d="M17 13c-2 0-3.5-1.5-3.5-4S15 5 17 5s3.5 1.5 3.5 4-1.5 4-3.5 4z"/><path d="M17 13v4"/></svg><span>البالونات</span></a>
+    <a href="fireworks.html" class="nav-link" aria-label="ألعاب نارية">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12V6"/><path d="M12 12l5-3"/><path d="M12 12l5 3"/><path d="M12 12v6"/><path d="M12 12l-5 3"/><path d="M12 12l-5-3"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg><span>ألعاب نارية</span></a>
+    <a href="gift.html" class="nav-link" aria-label="الهدية">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><rect x="2" y="7" width="20" height="5" rx="1"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg><span>الهدية</span></a>
+    <a href="letters.html" class="nav-link" aria-label="الرسائل">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span>الرسائل</span></a>
+    <a href="music.html" class="nav-link" aria-label="الموسيقى">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="16" r="2.5"/></svg><span>الموسيقى</span></a>
+    <a href="footer.html" class="nav-link" aria-label="الخاتمة">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><span>الخاتمة</span></a>
+  </nav>
+
+  <main id="main-content" class="page-wrapper">
+    <div class="reveal reveal--scale">
+      <svg class="footer-heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+    </div>
+
+    <div class="glass-card reveal reveal-delay-1" style="text-align:center; padding: var(--space-xl);">
+      <div class="days-counter" id="daysCounter">0</div>
+      <div class="days-label">يوم من الحب</div>
+    </div>
+
+    <div class="glass-card reveal reveal-delay-2" style="max-width: 500px; width: 100%; padding: var(--space-xl);">
+      <div class="quote-rotate" id="quoteRotate"></div>
+    </div>
+
+    <div class="reveal reveal-delay-3" style="text-align:center;">
+      <button class="kiss-btn" id="kissBtn" aria-label="أرسل قبلة">💋</button>
+      <p style="color: var(--text-muted); font-size: var(--text-sm); margin-top: var(--space-sm);">اضغط لإرسال قبلة</p>
+    </div>
+
+    <div class="reveal reveal-delay-4" style="text-align:center;">
+      <div class="signature-line"></div>
+      <div class="signature">بحب، الى أسم</div>
+      <div class="signature-line"></div>
+      <a href="index.html" class="btn btn--primary" style="margin-top: var(--space-lg);">العودة للبداية</a>
+    </div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="js/self-evolve.js"></script>
+  <script src="js/engine3d.js"></script>
+  <script src="js/petals.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/config-engine.js"></script>
+  <script src="js/core.js"></script>
+  <script src="js/narrative.js"></script>
+  <script src="js/fps.js"></script>
+  <script>FPSMonitor.init();</script>
+  <script>
+    (function() {
+      'use strict';
+      if (window.Engine3D) Engine3D.init();
+      if (window.AuthSystem) AuthSystem.guard();
+
+      document.querySelectorAll('.reveal').forEach((el, i) => {
+        setTimeout(() => el.classList.add('visible'), 300 + i * 150);
+      });
+
+      const START_DATE = new Date('2026-01-01T00:00:00');
+      const quotes = [
+        "أحبكِ أكثر مما تتخيلين",
+        "أنتِ نبضة القلب التي لا تتوقف",
+        "كل لحظة معكِ هي كنز",
+        "إلى الأبد يا حبيبتي",
+        "أنتِ ضوء القمر في لياليّ",
+        "قلبي ملككِ اليوم وغداً"
+      ];
+
+      function updateDays() {
+        const days = Math.floor((Date.now() - START_DATE) / 86400000);
+        const el = document.getElementById('daysCounter');
+        if (el) el.textContent = Math.max(0, days).toLocaleString('ar-SA');
+      }
+      updateDays();
+
+      let quoteIdx = 0;
+      const quoteEl = document.getElementById('quoteRotate');
+      function rotateQuote() {
+        if (!quoteEl) return;
+        quoteEl.style.opacity = '0';
+        setTimeout(() => {
+          quoteEl.textContent = quotes[quoteIdx];
+          quoteEl.style.opacity = '1';
+          quoteIdx = (quoteIdx + 1) % quotes.length;
+        }, 500);
+      }
+      rotateQuote();
+      setInterval(rotateQuote, 5000);
+
+      document.getElementById('kissBtn').addEventListener('click', function(e) {
+        const rect = this.getBoundingClientRect();
+        for (let i = 0; i < 12; i++) {
+          const heart = document.createElement('div');
+          heart.textContent = '💋';
+          heart.style.cssText = `
+            position: fixed; left: ${rect.left + rect.width/2}px; top: ${rect.top}px;
+            font-size: ${16 + Math.random()*12}px; pointer-events: none; z-index: 1000;
+          `;
+          document.body.appendChild(heart);
+          let x = 0, y = 0, op = 1;
+          const a = (Math.random()-0.5)*Math.PI;
+          const v = 30 + Math.random()*60;
+          const vx = Math.cos(a)*v, vy = Math.sin(a)*v - 80;
+          const start = performance.now();
+          function anim(now) {
+            const dt = Math.min((now-start)/1000, 0.032);
+            x += vx*dt; y += vy*dt; op -= 0.015;
+            heart.style.transform = `translate(${x}px,${y}px)`;
+            heart.style.opacity = op;
+            if (op > 0) requestAnimationFrame(anim); else heart.remove();
+          }
+          requestAnimationFrame(anim);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

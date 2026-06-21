@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="ذكرياتنا الجميلة — معرض لحظاتنا السعيدة معاً">
+  <meta name="theme-color" content="#e91e63">
+  <meta property="og:title" content="ذكرياتنا — أسم">
+  <meta property="og:description" content="معرض لحظاتنا السعيدة معاً">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="manifest" href="manifest.json">
+  <title>ذكرياتنا — أسم</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/core.css">
+  <style>
+    :root {
+      --safe-left: env(safe-area-inset-left, 0px);
+    }
+
+    /* ── Cinematic Video Frame ── */
+    .cinematic-video-frame {
+      width: 90%;
+      max-width: 800px;
+      margin: var(--space-lg) auto;
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: #0a0a0a;
+      box-shadow: 0 12px 48px color-mix(in srgb, var(--accent-rose) 16%, transparent),
+                  0 0 0 1px color-mix(in srgb, var(--accent-pink) 20%, transparent) inset;
+      border: 1px solid color-mix(in srgb, var(--accent-pink) 25%, transparent);
+      transition: box-shadow var(--duration-base), transform var(--duration-base);
+    }
+
+    .cinematic-video-frame:hover {
+      box-shadow: 0 16px 56px color-mix(in srgb, var(--accent-rose) 24%, transparent),
+                  0 0 0 1px color-mix(in srgb, var(--accent-pink) 35%, transparent) inset;
+      transform: translateY(-2px);
+    }
+
+    .cinematic-video {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: contain;
+      display: block;
+      background: #0a0a0a;
+    }
+
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity var(--duration-base) var(--ease-smooth),
+                  background var(--duration-base) var(--ease-smooth);
+      cursor: pointer;
+    }
+
+    .cinematic-video-frame.playing .video-overlay {
+      opacity: 0;
+      pointer-events: none;
+      background: transparent;
+    }
+
+    .video-play-btn {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform var(--duration-base) var(--ease-out-expo),
+                  background var(--duration-base),
+                  border-color var(--duration-base);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .video-play-btn:hover {
+      transform: scale(1.12);
+      background: rgba(255, 255, 255, 0.22);
+      border-color: rgba(255, 255, 255, 0.55);
+    }
+
+    .video-play-btn svg {
+      width: 30px;
+      height: 30px;
+      fill: #fff;
+      margin-right: -3px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+
+    /* ── Fullscreen Exit Button ── */
+    .video-exit-btn {
+      position: absolute;
+      top: var(--space-4);
+      left: var(--space-4);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--duration-base) var(--ease-smooth),
+                  visibility var(--duration-base),
+                  background var(--duration-base),
+                  transform var(--duration-base);
+      z-index: 10;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .cinematic-video-frame.is-fullscreen .video-exit-btn,
+    .cinematic-video-frame:fullscreen .video-exit-btn,
+    .cinematic-video-frame:-webkit-full-screen .video-exit-btn {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .video-exit-btn:hover {
+      background: rgba(0, 0, 0, 0.55);
+      border-color: rgba(255, 255, 255, 0.45);
+      transform: scale(1.1);
+    }
+
+    .video-exit-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* ── Masonry Gallery ── */
+    .gallery-masonry {
+      width: 100%;
+      max-width: 960px;
+      columns: 1;
+      column-gap: var(--space-md);
+    }
+
+    @media (min-width: 480px) { .gallery-masonry { columns: 2; } }
+    @media (min-width: 768px) { .gallery-masonry { columns: 3; } }
+
+    @media (max-width: 768px) {
+      .item-caption {
+        opacity: 1;
+        background: linear-gradient(to top, rgba(0,0,0,0.55), transparent 70%);
+        justify-content: flex-end;
+        padding-bottom: var(--space-3);
+      }
+    }
+
+    .gallery-item {
+      break-inside: avoid;
+      margin-bottom: var(--space-md);
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      cursor: zoom-in;
+      background: color-mix(in srgb, var(--accent-pink) 8%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent-pink) 18%, transparent);
+      opacity: 0;
+      transition: opacity 0.5s var(--ease-smooth), transform var(--duration-base) var(--ease-out-expo),
+                  border-color var(--duration-base),
+                  box-shadow var(--duration-base);
+      will-change: transform, opacity;
+      contain: layout paint;
+    }
+
+    .gallery-item.revealed { opacity: 1; }
+
+    .gallery-item:hover {
+      transform: translateY(-6px) scale(1.015);
+      border-color: color-mix(in srgb, var(--accent-pink) 45%, transparent);
+      box-shadow: 0 12px 40px color-mix(in srgb, var(--accent-rose) 18%, transparent);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform var(--duration-slow) var(--ease-out-expo),
+                  filter var(--duration-base),
+                  opacity var(--duration-base);
+    }
+
+    .gallery-item:hover img { transform: scale(1.05); }
+
+    .img-blur { filter: blur(12px); opacity: 0.6; }
+    .img-loaded { filter: blur(0); opacity: 1; }
+
+    /* ── Caption ── */
+    .item-caption {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding: var(--space-md);
+      background: linear-gradient(to top, color-mix(in srgb, var(--text-primary) 72%, transparent) 0%, color-mix(in srgb, var(--text-primary) 25%, transparent) 50%, transparent 100%);
+      opacity: 0;
+      transition: opacity var(--duration-base) var(--ease-smooth);
+      pointer-events: none;
+      text-align: center;
+    }
+
+    .gallery-item:hover .item-caption { opacity: 1; }
+
+    .item-caption-title {
+      font-family: var(--font-display);
+      font-size: var(--text-base);
+      color: var(--text-on-accent);
+      margin-bottom: var(--space-1);
+    }
+
+    .item-caption-date {
+      font-size: var(--text-xs);
+      color: var(--surface-65);
+    }
+
+    /* ── Lightbox ── */
+    .lightbox-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: var(--z-modal);
+      background: rgba(var(--color-bg-dark-rgb), 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-md);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--duration-base), visibility 0s var(--duration-base);
+    }
+
+    .lightbox-overlay.show {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity var(--duration-base), visibility 0s;
+    }
+
+    .lightbox-img {
+      max-width: 90vw;
+      max-height: 85vh;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      transform: scale(0.9);
+      transition: transform var(--duration-base) var(--ease-out-back);
+    }
+
+    .lightbox-overlay.show .lightbox-img {
+      transform: scale(1);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: var(--space-6);
+      left: var(--space-6);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--surface-25);
+      border: 1px solid var(--surface-50);
+      color: var(--text-on-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background var(--duration-fast);
+      z-index: calc(var(--z-modal) + 1);
+    }
+
+    .lightbox-close:hover { background: var(--surface-50); }
+
+    .lightbox-caption {
+      position: absolute;
+      bottom: var(--space-8);
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: var(--surface-80);
+      font-size: var(--text-sm);
+      padding: var(--space-2);
+    }
+  </style>
+</head>
+<body data-page="gallery">
+  <a href="#main-content" class="skip-link">تخطى الى المحتوى</a>
+
+  <div class="luxury-bg" aria-hidden="true"></div>
+  <div id="bg3d" aria-hidden="true"></div>
+  <canvas id="petalsCanvas" class="floating-petals-canvas" aria-hidden="true"></canvas>
+
+     <nav class="cinematic-nav" aria-label="التنقل الرئيسي">
+    <a href="index.html" class="nav-link" aria-label="الرئيسية">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 4l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9.5z"/><path d="M9 22V12h6v10"/></svg><span>الرئيسية</span></a>
+    <a href="countdown.html" class="nav-link" aria-label="العد التنازلي">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14"/><path d="M5 21h14"/><path d="M5 3c0 4 2.5 6.5 7 9 4.5-2.5 7-5 7-9"/><path d="M19 21c0-4-2.5-6.5-7-9-4.5 2.5-7 5-7 9"/></svg><span>العد</span></a>
+    <a href="hero.html" class="nav-link" aria-label="ملكتي">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h16v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2z"/><path d="M4 18l2-8 3 5 3-8 3 8 3-5 2 8"/></svg><span>ملكتي</span></a>
+    <a href="lily.html" class="nav-link" aria-label="اليلك">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V10"/><path d="M12 10c-3-1-5-4-5-7 1.5 0 3 1.5 4 3.5"/><path d="M12 10c3-1 5-4 5-7-1.5 0-3 1.5-4 3.5"/><path d="M12 10c-1.5-2-1.5-5 0-8"/><path d="M12 10c1.5-2 1.5-5 0-8"/></svg><span>اليلك</span></a>
+    <a href="gallery.html" class="nav-link" aria-label="الذكريات">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3 8h18"/><path d="M3 16h18"/><path d="M6 5v14"/><path d="M18 5v14"/></svg><span>الذكريات</span></a>
+    <a href="balloons.html" class="nav-link" aria-label="البالونات">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15c-2.5 0-4.5-2-4.5-5S6.5 5 9 5s4.5 2 4.5 5-2 5-4.5 5z"/><path d="M9 15v4"/><path d="M17 13c-2 0-3.5-1.5-3.5-4S15 5 17 5s3.5 1.5 3.5 4-1.5 4-3.5 4z"/><path d="M17 13v4"/></svg><span>البالونات</span></a>
+    <a href="fireworks.html" class="nav-link" aria-label="ألعاب نارية">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12V6"/><path d="M12 12l5-3"/><path d="M12 12l5 3"/><path d="M12 12v6"/><path d="M12 12l-5 3"/><path d="M12 12l-5-3"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg><span>ألعاب نارية</span></a>
+    <a href="gift.html" class="nav-link" aria-label="الهدية">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><rect x="2" y="7" width="20" height="5" rx="1"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg><span>الهدية</span></a>
+    <a href="letters.html" class="nav-link" aria-label="الرسائل">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span>الرسائل</span></a>
+    <a href="music.html" class="nav-link" aria-label="الموسيقى">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="16" r="2.5"/></svg><span>الموسيقى</span></a>
+    <a href="footer.html" class="nav-link" aria-label="الخاتمة">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><span>الخاتمة</span></a>
+  </nav>
+
+  <main id="main-content" class="page-wrapper">
+    <h1 class="display-title display-title--1 text-gradient-purple reveal">ذكرياتنا الجميلة</h1>
+
+    <!-- Cinematic Video Frame -->
+    <div class="cinematic-video-frame reveal reveal-delay-1" id="cinematicVideoFrame">
+      <video
+        id="cinematicVideo"
+        class="cinematic-video"
+        playsinline
+        preload="metadata"
+        poster="assets/photos/shody.png"
+        aria-label="فيديو أسم"
+      >
+        <source src="assets/photos/shody.mp4" type="video/mp4">
+        متصفحك لا يدعم تشغيل الفيديو.
+      </video>
+      <div class="video-overlay" id="videoOverlay">
+        <button class="video-play-btn" id="videoPlayBtn" aria-label="تشغيل الفيديو">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+      </div>
+      <button class="video-exit-btn" id="videoExitBtn" aria-label="خروج من الشاشة الكاملة">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Masonry Gallery -->
+    <div class="gallery-masonry reveal reveal-delay-2" id="galleryMasonry" data-random-gallery>
+      <!-- Photos are injected randomly via JavaScript -->
+    </div>
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox-overlay" id="lightbox" aria-hidden="true">
+    <button class="lightbox-close" id="lightboxClose" aria-label="إغلاق">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="js/self-evolve.js"></script>
+  <script src="js/engine3d.js"></script>
+  <script src="js/petals.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/config-engine.js"></script>
+  <script src="js/core.js"></script>
+  <script src="js/narrative.js"></script>
+  <script src="js/fps.js"></script>
+  <script>FPSMonitor.init();</script>
+
+  <script>
+    (function() {
+      'use strict';
+      if (window.Engine3D) Engine3D.init();
+
+      /* ── Auth Guard ── */
+      if (window.AuthSystem) AuthSystem.guard();
+
+      /* ── Random Photo Gallery ── */
+      const photos = [
+        { src: 'assets/photos/shody.png', alt: 'أسم', caption: 'أسم', date: 'ذاكرة جميلة' },
+        { src: 'assets/photos/shody1.png', alt: 'أسم', caption: 'أسم', date: 'لحظة سعيدة' },
+        { src: 'assets/photos/shody2.png', alt: 'أسم', caption: 'أسم', date: 'ابتسامة دافئة' },
+        { src: 'assets/photos/shody3.png', alt: 'أسم', caption: 'أسم', date: 'يوم مميز' },
+        { src: 'assets/photos/shody4.png', alt: 'أسم', caption: 'أسم', date: 'ذكرى لا تُنسى' },
+        { src: 'assets/photos/shody5.png', alt: 'أسم', caption: 'أسم', date: 'أجمل يوم' }
+      ];
+
+      function shuffle(array) {
+        const items = array.slice();
+        for (let i = items.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [items[i], items[j]] = [items[j], items[i]];
+        }
+        return items;
+      }
+
+      function renderGallery() {
+        const container = document.getElementById('galleryMasonry');
+        if (!container) return;
+        const shuffled = shuffle(photos);
+        container.innerHTML = shuffled.map(photo => `
+          <div class="gallery-item" data-caption="${photo.caption}">
+            <img src="${photo.src}" alt="${photo.alt}" loading="lazy" class="img-blur" onload="this.classList.add('img-loaded'); this.classList.remove('img-blur');">
+            <div class="item-caption">
+              <span class="item-caption-title">${photo.caption}</span>
+              <span class="item-caption-date">${photo.date}</span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      renderGallery();
+
+      /* ── Staggered reveal ── */
+      (function revealItems() {
+        const container = document.getElementById('galleryMasonry');
+        if (!container) return;
+        const items = container.querySelectorAll('.gallery-item');
+        items.forEach((item, i) => {
+          setTimeout(() => item.classList.add('revealed'), i * 60);
+        });
+        items.forEach(item => {
+          const img = item.querySelector('img');
+          if (img && img.complete) {
+            img.classList.add('img-loaded');
+            img.classList.remove('img-blur');
+          }
+        });
+      })();
+
+      /* ── Lightbox ── */
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightboxImg');
+      const lightboxCaption = document.getElementById('lightboxCaption');
+      const lightboxClose = document.getElementById('lightboxClose');
+
+      function openLightbox(item) {
+        const img = item.querySelector('img');
+        if (!img) return;
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt || '';
+        lightboxCaption.textContent = item.dataset.caption || '';
+        lightbox.classList.add('show');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('show');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        setTimeout(() => { lightboxImg.src = ''; }, 300);
+      }
+
+      document.getElementById('galleryMasonry').addEventListener('click', (e) => {
+        const item = e.target.closest('.gallery-item');
+        if (item) openLightbox(item);
+      });
+
+      lightboxClose.addEventListener('click', closeLightbox);
+      lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+      /* ── Cinematic Video Player ── */
+      const cinematicVideoFrame = document.getElementById('cinematicVideoFrame');
+      const cinematicVideo = document.getElementById('cinematicVideo');
+      const videoPlayBtn = document.getElementById('videoPlayBtn');
+      const videoOverlay = document.getElementById('videoOverlay');
+
+      function enterFullscreen(element) {
+        const target = element || cinematicVideoFrame;
+        if (target.requestFullscreen) {
+          return target.requestFullscreen();
+        }
+        if (target.webkitRequestFullscreen) {
+          return target.webkitRequestFullscreen();
+        }
+        if (target.msRequestFullscreen) {
+          return target.msRequestFullscreen();
+        }
+        if (cinematicVideo && cinematicVideo.webkitEnterFullscreen) {
+          cinematicVideo.webkitEnterFullscreen();
+          return Promise.resolve();
+        }
+        return Promise.reject('Fullscreen not supported');
+      }
+
+      function isFullscreen() {
+        return !!(document.fullscreenElement ||
+                  document.webkitFullscreenElement ||
+                  document.msFullscreenElement);
+      }
+
+      function playVideo() {
+        if (!cinematicVideo || !cinematicVideoFrame) return;
+        cinematicVideo.play().then(() => {
+          cinematicVideoFrame.classList.add('playing');
+          return enterFullscreen(cinematicVideoFrame).catch(() => {
+            // Fullscreen blocked or unsupported, but video still plays
+          });
+        }).catch(err => {
+          console.warn('Video playback failed:', err);
+        });
+      }
+
+      function pauseVideo() {
+        if (!cinematicVideo) return;
+        cinematicVideo.pause();
+        cinematicVideoFrame.classList.remove('playing');
+      }
+
+      if (videoPlayBtn && videoOverlay && cinematicVideo) {
+        videoPlayBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          playVideo();
+        });
+
+        videoOverlay.addEventListener('click', () => {
+          if (cinematicVideo.paused) {
+            playVideo();
+          } else {
+            pauseVideo();
+          }
+        });
+      }
+
+      if (cinematicVideo) {
+        cinematicVideo.addEventListener('click', () => {
+          if (cinematicVideo.paused) {
+            playVideo();
+          } else {
+            pauseVideo();
+          }
+        });
+
+        cinematicVideo.addEventListener('play', () => {
+          cinematicVideoFrame.classList.add('playing');
+        });
+
+        cinematicVideo.addEventListener('pause', () => {
+          cinematicVideoFrame.classList.remove('playing');
+        });
+
+        cinematicVideo.addEventListener('ended', () => {
+          cinematicVideoFrame.classList.remove('playing');
+        });
+      }
+
+      function updateFullscreenUI() {
+        if (cinematicVideoFrame) {
+          cinematicVideoFrame.classList.toggle('is-fullscreen', isFullscreen());
+        }
+      }
+
+      function exitFullscreen() {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      }
+
+      function handleFullscreenChange() {
+        updateFullscreenUI();
+        if (!isFullscreen() && cinematicVideo && !cinematicVideo.paused) {
+          pauseVideo();
+        }
+      }
+
+      document.addEventListener('fullscreenchange', handleFullscreenChange);
+      document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+      document.addEventListener('msfullscreenchange', handleFullscreenChange);
+
+      if (videoExitBtn) {
+        videoExitBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          exitFullscreen();
+          pauseVideo();
+        });
+      }
+
+      /* ── Reveals ── */
+      document.querySelectorAll('.reveal').forEach((el, i) => {
+        setTimeout(() => el.classList.add('visible'), 300 + i * 150);
+      });
+    })();
+  </script>
+</body>
+</html>

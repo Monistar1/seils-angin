@@ -1,0 +1,326 @@
+{
+  "_schema": "tiered-occasion-v1",
+  "_version": "1.0.0",
+  "package": "luxury",
+  "meta": {
+    "name": "Occasion Engine",
+    "description": "Tiered digital experience engine for birthdays, graduations, anniversaries and apologies.",
+    "author": "",
+    "created": "",
+    "updated": ""
+  },
+  "base": {
+    "site": {
+      "title": {
+        "ar": "لحظة خاصة",
+        "en": "A Special Moment"
+      },
+      "description": {
+        "ar": "تجربة رقمية مخصصة للاحتفال بلحظة مميزة.",
+        "en": "A personalized digital experience celebrating a special moment."
+      },
+      "defaultLang": "ar",
+      "supportedLangs": ["ar", "en"]
+    },
+    "access": {
+      "pin_enabled": false,
+      "pin_length": 7,
+      "pin_hash": "12345",
+      "pin_ttl_hours": 4,
+      "max_attempts": 5,
+      "lockout_minutes": 15
+    },
+    "features": {
+      "countdown": false,
+      "gallery": false,
+      "letters": false,
+      "fireworks": false,
+      "balloons": false,
+      "petals": false,
+      "music": false,
+      "narrative_engine": false,
+      "reveal_engine": false,
+      "effects_3d": false,
+      "fps_monitor": false,
+      "language_switcher": true
+    },
+    "ui": {
+      "complexity": "minimal",
+      "animations": "none",
+      "transition_duration_ms": 500,
+      "theme": "romantic",
+      "show_nav": true,
+      "show_footer": true,
+      "nav_style": "cinematic"
+    },
+    "media": {
+      "max_gallery_images": 0,
+      "max_letters": 0,
+      "max_songs": 0,
+      "supports_video": false,
+      "supports_audio": true,
+      "lazy_load": true,
+      "preload_next_page": false
+    },
+    "story": {
+      "depth": "none",
+      "scenes": []
+    },
+    "performance": {
+      "quality": "auto",
+      "particle_density": "low",
+      "max_particles": 20,
+      "throttle_when_hidden": true
+    },
+    "pages": {
+      "index": true,
+      "pin": false,
+      "countdown": false,
+      "countdown1": false,
+      "hero": false,
+      "lily": false,
+      "gallery": false,
+      "balloons": false,
+      "fireworks": false,
+      "gift": false,
+      "letters": false,
+      "music": false,
+      "footer": false
+    }
+  },
+  "packages": {
+    "basic": {
+      "features": {
+        "countdown": false,
+        "gallery": false,
+        "letters": false,
+        "fireworks": false,
+        "balloons": false,
+        "petals": false,
+        "music": true,
+        "narrative_engine": false,
+        "reveal_engine": false,
+        "effects_3d": false,
+        "fps_monitor": false,
+        "language_switcher": true
+      },
+      "access": {
+        "pin_enabled": false
+      },
+      "ui": {
+        "complexity": "minimal",
+        "animations": "none",
+        "transition_duration_ms": 300,
+        "show_nav": false,
+        "show_footer": true,
+        "nav_style": "simple"
+      },
+      "media": {
+        "max_gallery_images": 3,
+        "max_letters": 1,
+        "max_songs": 1,
+        "supports_video": false,
+        "supports_audio": true,
+        "lazy_load": true,
+        "preload_next_page": false
+      },
+      "story": {
+        "depth": "single",
+        "scenes": ["index"]
+      },
+      "performance": {
+        "quality": "low",
+        "particle_density": "none",
+        "max_particles": 0,
+        "throttle_when_hidden": true
+      },
+      "pages": {
+        "index": true,
+        "pin": false,
+        "countdown": false,
+        "countdown1": false,
+        "hero": false,
+        "lily": false,
+        "gallery": false,
+        "balloons": false,
+        "fireworks": false,
+        "gift": false,
+        "letters": false,
+        "music": false,
+        "footer": false
+      }
+    },
+    "pro": {
+      "features": {
+        "countdown": true,
+        "gallery": true,
+        "letters": true,
+        "fireworks": false,
+        "balloons": true,
+        "petals": true,
+        "music": true,
+        "narrative_engine": true,
+        "reveal_engine": true,
+        "effects_3d": true,
+        "fps_monitor": false,
+        "language_switcher": true
+      },
+      "access": {
+        "pin_enabled": false
+      },
+      "ui": {
+        "complexity": "balanced",
+        "animations": "light",
+        "transition_duration_ms": 500,
+        "show_nav": true,
+        "show_footer": true,
+        "nav_style": "cinematic"
+      },
+      "media": {
+        "max_gallery_images": 10,
+        "max_letters": 3,
+        "max_songs": 5,
+        "supports_video": true,
+        "supports_audio": true,
+        "lazy_load": true,
+        "preload_next_page": true
+      },
+      "story": {
+        "depth": "moderate",
+        "scenes": ["index", "countdown", "hero", "gallery", "letters", "music", "footer"]
+      },
+      "performance": {
+        "quality": "auto",
+        "particle_density": "medium",
+        "max_particles": 45,
+        "throttle_when_hidden": true
+      },
+      "pages": {
+        "index": true,
+        "pin": false,
+        "countdown": true,
+        "countdown1": false,
+        "hero": true,
+        "lily": false,
+        "gallery": true,
+        "balloons": true,
+        "fireworks": false,
+        "gift": false,
+        "letters": true,
+        "music": true,
+        "footer": true
+      }
+    },
+    "luxury": {
+      "features": {
+        "countdown": true,
+        "gallery": true,
+        "letters": true,
+        "fireworks": true,
+        "balloons": true,
+        "petals": true,
+        "music": true,
+        "narrative_engine": true,
+        "reveal_engine": true,
+        "effects_3d": true,
+        "fps_monitor": true,
+        "language_switcher": true
+      },
+      "access": {
+        "pin_enabled": true
+      },
+      "ui": {
+        "complexity": "cinematic",
+        "animations": "maximum",
+        "transition_duration_ms": 800,
+        "show_nav": true,
+        "show_footer": true,
+        "nav_style": "cinematic"
+      },
+      "media": {
+        "max_gallery_images": 50,
+        "max_letters": 10,
+        "max_songs": 20,
+        "supports_video": true,
+        "supports_audio": true,
+        "lazy_load": true,
+        "preload_next_page": true
+      },
+      "story": {
+        "depth": "full",
+        "scenes": ["index", "pin", "countdown", "hero", "lily", "gallery", "balloons", "fireworks", "gift", "letters", "music", "footer"]
+      },
+      "performance": {
+        "quality": "high",
+        "particle_density": "high",
+        "max_particles": 120,
+        "throttle_when_hidden": true
+      },
+      "pages": {
+        "index": true,
+        "pin": true,
+        "countdown": true,
+        "countdown1": true,
+        "hero": true,
+        "lily": true,
+        "gallery": true,
+        "balloons": true,
+        "fireworks": true,
+        "gift": true,
+        "letters": true,
+        "music": true,
+        "footer": true
+      }
+    }
+  },
+  "content": {
+    "dates": {
+      "countdown_target": "",
+      "first_meeting": "",
+      "start_date": "",
+      "event_date": ""
+    },
+    "names": {
+      "recipient": "",
+      "sender": ""
+    },
+    "messages": {
+      "welcome": {
+        "ar": "اهلاً بكِ في عالمكِ الخاص",
+        "en": "Welcome to your special world"
+      },
+      "pin_hint": {
+        "ar": "أدخلي الرقم السري لفتح البوابة",
+        "en": "Enter the secret code to unlock the gate"
+      }
+    },
+    "gallery": [],
+    "letters": [],
+    "songs": [],
+    "quotes": [],
+    "daily_messages": []
+  },
+  "i18n": {
+    "nav": {
+      "index": { "ar": "البداية", "en": "Start" },
+      "pin": { "ar": "البوابة", "en": "Gate" },
+      "countdown": { "ar": "العد التنازلي", "en": "Countdown" },
+      "hero": { "ar": "قلبي", "en": "Heart" },
+      "lily": { "ar": "الزنبق", "en": "Lilies" },
+      "gallery": { "ar": "الذكريات", "en": "Memories" },
+      "balloons": { "ar": "البالونات", "en": "Balloons" },
+      "fireworks": { "ar": "الألعاب النارية", "en": "Fireworks" },
+      "gift": { "ar": "الهدايا", "en": "Gifts" },
+      "letters": { "ar": "الرسائل", "en": "Letters" },
+      "music": { "ar": "الموسيقى", "en": "Music" },
+      "footer": { "ar": "الختام", "en": "Finale" }
+    },
+    "actions": {
+      "enter": { "ar": "ادخلي", "en": "Enter" },
+      "next": { "ar": "التالي", "en": "Next" },
+      "back": { "ar": "عودة", "en": "Back" },
+      "play": { "ar": "تشغيل", "en": "Play" },
+      "pause": { "ar": "إيقاف", "en": "Pause" }
+    }
+  }
+}
