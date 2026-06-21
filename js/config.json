@@ -25,7 +25,8 @@
     "access": {
       "pin_enabled": false,
       "pin_length": 7,
-      "pin_hash": "1234567",
+      "pin": "",
+      "pin_hash": "",
       "pin_ttl_hours": 4,
       "max_attempts": 5,
       "lockout_minutes": 15
@@ -227,7 +228,8 @@
         "language_switcher": true
       },
       "access": {
-        "pin_enabled": true
+        "pin_enabled": true,
+        "pin": ""
       },
       "ui": {
         "complexity": "cinematic",

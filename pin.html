@@ -394,8 +394,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="js/self-evolve.js"></script>
   <script src="js/engine3d.js"></script>
-  <script src="js/auth.js"></script>
   <script src="js/config-engine.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/core.js"></script>
   <script src="js/narrative.js"></script>
   <script src="js/fps.js"></script>
@@ -436,6 +436,18 @@
       const heartLockRect = document.getElementById('heartLockRect');
       const heartLockCircle = document.getElementById('heartLockCircle');
       const successOverlay = document.getElementById('successOverlay');
+
+      function renderPinDots() {
+        const len = Number(window.AppConfig?.config?.access?.pin_length) || 7;
+        pinDisplay.innerHTML = '';
+        for (let i = 0; i < len; i++) {
+          const dot = document.createElement('span');
+          dot.className = 'pin-dot';
+          dot.setAttribute('data-i', i);
+          pinDisplay.appendChild(dot);
+        }
+      }
+      renderPinDots();
 
       function updatePinUI() {
         const dots = pinDisplay.querySelectorAll('.pin-dot');
@@ -497,12 +509,17 @@
         }
       }
 
+      function getPinLength() {
+        return Number(window.AppConfig?.config?.access?.pin_length) || 7;
+      }
+
       function handleKey(key) {
         if (AuthSystem.checkLockout()) return;
-        if (pin.length < 7) {
+        const len = getPinLength();
+        if (pin.length < len) {
           pin += key;
           updatePinUI();
-          if (pin.length === 7) {
+          if (pin.length === len) {
             unlockHeart();
           }
         }
@@ -511,7 +528,7 @@
       function handleAction(action) {
         if (AuthSystem.checkLockout()) return;
         if (action === 'clear') {
-          pin = '1234567';
+          pin = '';
           updatePinUI();
         } else if (action === 'back') {
           pin = pin.slice(0, -1);

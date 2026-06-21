@@ -183,7 +183,8 @@
     const session = getSession();
     if (!session) return;
 
-    const warningTime = session.e - (SESSION_DURATION - (SESSION_DURATION - 15 * 60 * 1000)); // 15 min before
+    const duration = getSessionDuration();
+    const warningTime = session.e - (duration - (duration - 15 * 60 * 1000)); // 15 min before
     const now = Date.now();
     if (warningTime > now) {
       setTimeout(() => {
@@ -209,7 +210,7 @@
     document.getElementById('extendSession').addEventListener('click', () => {
       const session = getSession();
       if (session) {
-        session.e = Date.now() + SESSION_DURATION;
+        session.e = Date.now() + getSessionDuration();
         localStorage.setItem(AUTH_KEY, encryptSession(session.t, session.e));
       }
       modal.remove();
@@ -225,6 +226,33 @@
 
   /* ---- Public API ---- */
   window.AuthSystem = {
+    /**
+     * Generate the SHA-256 hash for a plain PIN (with pepper).
+     * Use this in the browser console to fill config.json access.pin_hash.
+     * Example: AuthSystem.generatePinHash('1234567').then(console.log)
+     */
+    async generatePinHash(pin) {
+      return sha256(String(pin));
+    },
+
+    /**
+     * Resolve the expected PIN hash from config.json.
+     * Priority:
+     *   1. access.pin_hash (pre-computed SHA-256)
+     *   2. access.pin (plain text — hashed automatically)
+     *   3. No PIN configured → returns null
+     */
+    async resolveExpectedHash() {
+      const access = getAccessConfig();
+      if (access.pin_hash && String(access.pin_hash).length >= 32) {
+        return String(access.pin_hash).toLowerCase();
+      }
+      if (access.pin && String(access.pin).length >= 4) {
+        return sha256(String(access.pin));
+      }
+      return null;
+    },
+
     async validatePin(pin) {
       if (!window.AppConfig?.isPinEnabled()) return { success: true, bypass: true };
       if (isLocked) return { success: false, locked: true };
@@ -232,8 +260,13 @@
 
       const hash = await sha256(pin);
       if (!cachedExpectedHash) {
-        const cfgHash = getAccessConfig().pin_hash;
-        cachedExpectedHash = cfgHash || await sha256('1093109');
+        cachedExpectedHash = await this.resolveExpectedHash();
+      }
+
+      // PIN enabled but not configured → reject clearly
+      if (!cachedExpectedHash) {
+        console.error('[AuthSystem] PIN is enabled but no pin/pin_hash is configured in config.json');
+        return { success: false, configured: false };
       }
 
       if (hash !== cachedExpectedHash) {
@@ -305,8 +338,8 @@
     hapticPress
   };
 
-  // Auto-guard on load
-  document.addEventListener('DOMContentLoaded', () => {
+  // Auto-guard on load — wait for ConfigEngine so PIN settings are available
+  function runAutoGuard() {
     const page = document.body.dataset.page;
     if (page !== 'pin' && page !== 'index') {
       AuthSystem.guard();
@@ -316,6 +349,17 @@
     }
     if (AuthSystem.isAuthenticated()) {
       scheduleExpiryWarning();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.AppConfig?.ready) {
+      runAutoGuard();
+    } else if (window.AppConfig) {
+      window.AppConfig.on('ready', runAutoGuard);
+    } else {
+      // ConfigEngine missing — run anyway with defaults
+      runAutoGuard();
     }
   });
 })();
