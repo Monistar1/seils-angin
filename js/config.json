@@ -24,7 +24,7 @@
     },
     "access": {
       "pin_enabled": false,
-      "pin_length": 7,
+      "pin_length": 5,
       "pin_hash": "12345",
       "pin_ttl_hours": 4,
       "max_attempts": 5,
