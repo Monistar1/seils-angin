@@ -23,7 +23,7 @@
       "supportedLangs": ["ar", "en"]
     },
     "access": {
-      "pin_enabled": false,
+      "pin_enabled": true,
       "pin_length": 7,
       "pin": "1234567",
       "pin_hash": "",
